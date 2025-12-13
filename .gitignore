@@ -29,3 +29,10 @@
 !/tmp/storage/.keep
 
 /public/assets
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Ignore Kamal secrets file if it contains actual secrets
+# (currently safe, but adding for future protection)
+# /.kamal/secrets
