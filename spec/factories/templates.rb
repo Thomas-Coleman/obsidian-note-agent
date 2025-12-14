@@ -5,17 +5,17 @@ FactoryBot.define do
     prompt_template { "Analyze: {{content}}" }
     markdown_template { "# {{title}}\n\n{{summary}}" }
     is_default { false }
-    
+
     trait :default do
       is_default { true }
     end
-    
+
     trait :standard do
       name { 'standard' }
       prompt_template { Template.defaults['standard'][:prompt_template] }
       markdown_template { Template.defaults['standard'][:markdown_template] }
     end
-    
+
     trait :conversation do
       name { 'conversation' }
       prompt_template { Template.defaults['conversation'][:prompt_template] }
