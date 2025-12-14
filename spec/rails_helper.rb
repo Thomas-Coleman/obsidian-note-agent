@@ -32,7 +32,7 @@ RSpec.configure do |config|
 
   # Factory Bot configuration
   config.include FactoryBot::Syntax::Methods
-  
+
   # Include API helpers for request specs
   config.include ApiHelpers, type: :request
 

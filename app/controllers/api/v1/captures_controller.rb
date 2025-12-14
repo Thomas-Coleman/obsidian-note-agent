@@ -1,7 +1,7 @@
 module Api
   module V1
     class CapturesController < BaseController
-      before_action :set_capture, only: [:show, :update, :destroy]
+      before_action :set_capture, only: [ :show, :update, :destroy ]
 
       # GET /api/v1/captures
       def index
@@ -12,7 +12,7 @@ module Api
                               .per(params[:per_page] || 20)
 
         render_success(
-          captures.as_json(only: [:id, :content_type, :context, :status, :created_at, :published_at]),
+          captures.as_json(only: [ :id, :content_type, :context, :status, :created_at, :published_at ]),
           meta: pagination_meta(captures)
         )
       end
@@ -20,8 +20,8 @@ module Api
       # GET /api/v1/captures/:id
       def show
         render_success(@capture.as_json(
-          except: [:user_id],
-          methods: [:successful?, :processing?]
+          except: [ :user_id ],
+          methods: [ :successful?, :processing? ]
         ))
       end
 
@@ -31,7 +31,7 @@ module Api
 
         if capture.save
           # TODO: Enqueue background job for processing
-          render_success(capture.as_json(except: [:user_id]), status: :created)
+          render_success(capture.as_json(except: [ :user_id ]), status: :created)
         else
           render json: { errors: capture.errors.full_messages }, status: :unprocessable_content
         end
@@ -40,7 +40,7 @@ module Api
       # PATCH/PUT /api/v1/captures/:id
       def update
         if @capture.update(capture_params)
-          render_success(@capture.as_json(except: [:user_id]))
+          render_success(@capture.as_json(except: [ :user_id ]))
         else
           render json: { errors: @capture.errors.full_messages }, status: :unprocessable_content
         end

@@ -129,8 +129,8 @@ RSpec.describe 'API V1 Templates', type: :request do
 
     context 'with valid authentication' do
       it 'updates the template' do
-        patch "/api/v1/templates/#{template.id}", 
-              params: update_params.to_json, 
+        patch "/api/v1/templates/#{template.id}",
+              params: update_params.to_json,
               headers: headers
 
         expect(response).to have_http_status(:ok)
@@ -141,9 +141,9 @@ RSpec.describe 'API V1 Templates', type: :request do
 
       it 'does not update other users template' do
         other_template = create(:template, user: other_user)
-        
-        patch "/api/v1/templates/#{other_template.id}", 
-              params: update_params.to_json, 
+
+        patch "/api/v1/templates/#{other_template.id}",
+              params: update_params.to_json,
               headers: headers
 
         expect(response).to have_http_status(:not_found)
@@ -165,7 +165,7 @@ RSpec.describe 'API V1 Templates', type: :request do
 
       it 'does not delete other users template' do
         other_template = create(:template, user: other_user)
-        
+
         expect {
           delete "/api/v1/templates/#{other_template.id}", headers: headers
         }.not_to change(Template, :count)

@@ -1,10 +1,10 @@
 module Api
   module V1
     class TemplatesController < BaseController
-        before_action :set_template, only: [:show, :update, :destroy]
+        before_action :set_template, only: [ :show, :update, :destroy ]
 
 
-        # GET /api/v1/templates
+      # GET /api/v1/templates
       def index
         templates = current_user.templates.order(created_at: :desc)
         render_success(templates)

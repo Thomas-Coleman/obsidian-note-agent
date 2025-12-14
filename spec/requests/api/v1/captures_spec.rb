@@ -114,7 +114,7 @@ RSpec.describe 'API V1 Captures', type: :request do
           content: 'This is a test capture',
           content_type: 'conversation',
           context: 'Testing context',
-          tags: ['test', 'api']
+          tags: [ 'test', 'api' ]
         }
       }
     end
@@ -127,7 +127,7 @@ RSpec.describe 'API V1 Captures', type: :request do
 
         expect(response).to have_http_status(:created)
         expect(json_response['data']['content']).to eq('This is a test capture')
-        expect(json_response['data']['tags']).to eq(['test', 'api'])
+        expect(json_response['data']['tags']).to eq([ 'test', 'api' ])
       end
 
       it 'associates capture with current user' do
@@ -170,28 +170,28 @@ RSpec.describe 'API V1 Captures', type: :request do
       {
         capture: {
           context: 'Updated context',
-          tags: ['updated']
+          tags: [ 'updated' ]
         }
       }
     end
 
     context 'with valid authentication' do
       it 'updates the capture' do
-        patch "/api/v1/captures/#{capture.id}", 
-              params: update_params.to_json, 
+        patch "/api/v1/captures/#{capture.id}",
+              params: update_params.to_json,
               headers: headers
 
         expect(response).to have_http_status(:ok)
         capture.reload
         expect(capture.context).to eq('Updated context')
-        expect(capture.tags).to eq(['updated'])
+        expect(capture.tags).to eq([ 'updated' ])
       end
 
       it 'does not update other users capture' do
         other_capture = create(:capture, user: other_user)
-        
-        patch "/api/v1/captures/#{other_capture.id}", 
-              params: update_params.to_json, 
+
+        patch "/api/v1/captures/#{other_capture.id}",
+              params: update_params.to_json,
               headers: headers
 
         expect(response).to have_http_status(:not_found)
@@ -201,8 +201,8 @@ RSpec.describe 'API V1 Captures', type: :request do
     context 'with invalid params' do
       it 'returns validation errors' do
         invalid_params = { capture: { content: '' } }
-        patch "/api/v1/captures/#{capture.id}", 
-              params: invalid_params.to_json, 
+        patch "/api/v1/captures/#{capture.id}",
+              params: invalid_params.to_json,
               headers: headers
 
         expect(response).to have_http_status(:unprocessable_content)
@@ -225,7 +225,7 @@ RSpec.describe 'API V1 Captures', type: :request do
 
       it 'does not delete other users capture' do
         other_capture = create(:capture, user: other_user)
-        
+
         expect {
           delete "/api/v1/captures/#{other_capture.id}", headers: headers
         }.not_to change(Capture, :count)

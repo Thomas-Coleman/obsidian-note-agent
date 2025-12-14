@@ -40,11 +40,11 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
-gem 'anthropic-rb'        # Claude API client
-gem 'rack-cors'           # API CORS support
+gem "anthropic-rb"        # Claude API client
+gem "rack-cors"           # API CORS support
 
 # Pagination
-gem 'kaminari', '~> 1.2'
+gem "kaminari", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -72,8 +72,8 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 6.1'
-  gem 'factory_bot_rails', '~> 6.4'
-  gem 'faker', '~> 3.2'
-  gem 'shoulda-matchers', '~> 6.0'
+  gem "rspec-rails", "~> 6.1"
+  gem "factory_bot_rails", "~> 6.4"
+  gem "faker", "~> 3.2"
+  gem "shoulda-matchers", "~> 6.0"
 end

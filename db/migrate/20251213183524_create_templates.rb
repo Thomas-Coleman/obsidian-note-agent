@@ -6,10 +6,10 @@ class CreateTemplates < ActiveRecord::Migration[8.1]
       t.text :prompt_template, null: false, limit: 16777215  # MEDIUMTEXT
       t.text :markdown_template, limit: 16777215  # MEDIUMTEXT
       t.boolean :is_default, default: false
-      
+
       t.timestamps
-      
-      t.index [:user_id, :name], unique: true
+
+      t.index [ :user_id, :name ], unique: true
     end
   end
 end
