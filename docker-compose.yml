@@ -1,0 +1,107 @@
+services:
+  # MySQL 8 Database Service
+  # This runs MySQL in a container and creates the databases your app needs
+  db:
+    image: mysql:8.0
+    container_name: obsidian_note_agent_db
+    restart: unless-stopped
+
+    # Environment variables for MySQL setup
+    environment:
+      # Root password for MySQL - change this!
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      # Create these databases on first startup
+      MYSQL_DATABASE: obsidian_note_agent_production
+      # Create a user for the Rails app
+      MYSQL_USER: obsidian_note_agent
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+      # Allow connections from Docker network
+      MYSQL_ROOT_HOST: '%'
+
+    # Persist MySQL data so it survives container restarts
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Optional: custom MySQL configuration
+      # - ./config/mysql/production.cnf:/etc/mysql/conf.d/custom.cnf
+
+    # Expose MySQL port (only accessible from host machine)
+    # Using 3307 on host to avoid conflict with local MySQL
+    ports:
+      - "3307:3306"
+
+    # Health check to ensure MySQL is ready before starting Rails
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-changeme}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Rails Application Service
+  # This builds and runs your Rails app in production mode
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obsidian_note_agent_app
+    restart: unless-stopped
+
+    # Wait for database to be healthy before starting
+    depends_on:
+      db:
+        condition: service_healthy
+
+    # Environment variables for Rails
+    environment:
+      # Rails environment
+      RAILS_ENV: production
+
+      # Database connection - points to the 'db' service
+      DATABASE_URL: mysql2://obsidian_note_agent:${MYSQL_PASSWORD:-changeme}@db:3306/obsidian_note_agent_production
+
+      # Additional database URLs for Solid Cache, Queue, and Cable
+      CACHE_DATABASE_URL: mysql2://obsidian_note_agent:${MYSQL_PASSWORD:-changeme}@db:3306/obsidian_note_agent_production_cache
+      QUEUE_DATABASE_URL: mysql2://obsidian_note_agent:${MYSQL_PASSWORD:-changeme}@db:3306/obsidian_note_agent_production_queue
+      CABLE_DATABASE_URL: mysql2://obsidian_note_agent:${MYSQL_PASSWORD:-changeme}@db:3306/obsidian_note_agent_production_cable
+
+      # Rails master key from your config/master.key file
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+
+      # Anthropic API key for Claude integration
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+
+      # Run Solid Queue supervisor inside Puma (for background jobs)
+      SOLID_QUEUE_IN_PUMA: true
+
+      # Optional: Adjust these for performance tuning
+      # WEB_CONCURRENCY: 2
+      # RAILS_MAX_THREADS: 5
+
+    # Mount volumes for persistent data and Obsidian vault access
+    volumes:
+      # Rails storage (Active Storage files)
+      - rails_storage:/rails/storage
+
+      # Mount your Obsidian vault directory
+      # IMPORTANT: Update the path on the left to YOUR Obsidian vault location
+      # Format: /path/on/your/mac:/rails/obsidian_vault
+      - ${OBSIDIAN_VAULT_PATH}:/rails/obsidian_vault
+
+    # Expose port 80 (Thruster runs on 80, proxies to Rails on 3000)
+    ports:
+      - "80:80"
+
+    # Health check for the Rails app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Named volumes for data persistence
+# These persist data even when containers are removed
+volumes:
+  mysql_data:
+    driver: local
+  rails_storage:
+    driver: local
