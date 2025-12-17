@@ -30,7 +30,8 @@ module Api
         capture = current_user.captures.build(capture_params)
 
         if capture.save
-          # TODO: Enqueue background job for processing
+          # Enqueue background job for processing
+          ProcessCaptureJob.perform_later(capture.id)
           render_success(capture.as_json(except: [ :user_id ]), status: :created)
         else
           render json: { errors: capture.errors.full_messages }, status: :unprocessable_content
@@ -64,6 +65,7 @@ module Api
           :content_type,
           :context,
           :obsidian_folder,
+          :template_id,
           tags: []
         )
       end

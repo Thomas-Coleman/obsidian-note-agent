@@ -51,8 +51,7 @@ module Api
         params.require(:template).permit(
           :name,
           :prompt_template,
-          :markdown_template,
-          :is_default
+          :markdown_template
         )
       end
     end

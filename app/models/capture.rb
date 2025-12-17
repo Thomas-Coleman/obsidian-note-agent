@@ -1,5 +1,6 @@
 class Capture < ApplicationRecord
   belongs_to :user
+  belongs_to :template, optional: true
 
   # Explicitly declare the attribute type for enum
   attribute :status, :integer, default: 0

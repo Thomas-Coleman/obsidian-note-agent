@@ -66,12 +66,11 @@ RSpec.describe Template, type: :model do
         template = user.templates.create!(
           name: data[:name],
           prompt_template: data[:prompt_template],
-          markdown_template: data[:markdown_template],
-          is_default: true
+          markdown_template: data[:markdown_template]
         )
 
         expect(template).to be_persisted
-        expect(template.is_default).to be true
+        expect(template.name).to eq(data[:name])
       end
     end
   end

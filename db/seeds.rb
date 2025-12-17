@@ -10,24 +10,27 @@
 
 
 # Create a test user
-user = User.create!(
-  email: 'colemant72@gmail.com',
-  obsidian_vault_path: "/Users/tomcoleman/Documents/Obsidian/Tom's Obsidian Notes"
-)
+user = User.find_or_initialize_by(email: 'colemant72@gmail.com')
+if user.new_record?
+  user.obsidian_vault_path = "/Users/tomcoleman/Documents/Obsidian/Tom's Obsidian Notes"
+  user.save!
+  puts "Created user: #{user.email}"
+else
+  puts "User already exists: #{user.email}"
+end
 
-puts "Created user: #{user.email}"
 puts "API Token: #{user.api_token}"
 puts "Save this token for API requests!"
 
-# Create default templates
+# Create or update default templates
 Template.defaults.each do |type, template_data|
-  template = user.templates.create!(
-    name: template_data[:name],
-    prompt_template: template_data[:prompt_template],
-    markdown_template: template_data[:markdown_template],
-    is_default: true
-  )
-  puts "Created template: #{template.name}"
+  template = user.templates.find_or_initialize_by(name: template_data[:name])
+  template.prompt_template = template_data[:prompt_template]
+  template.markdown_template = template_data[:markdown_template]
+  template.save!
+
+  action = template.previously_new_record? ? "Created" : "Updated"
+  puts "#{action} template: #{template.name}"
 end
 
 puts "\n✅ Seed data created successfully!"

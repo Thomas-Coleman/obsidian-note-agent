@@ -16,10 +16,11 @@ FactoryBot.define do
 
     trait :published do
       status { :published }
-      summary { Faker::Lorem.paragraph(sentence_count: 3) }
-      key_points { Faker::Lorem.paragraphs(number: 3).join("\n") }
-      markdown_content { "# Test Note\n\n#{Faker::Lorem.paragraph}" }
-      obsidian_path { "Captures/test-note-#{SecureRandom.hex(4)}.md" }
+      generated_title { Faker::Lorem.sentence(word_count: 3) }
+      generated_summary { Faker::Lorem.paragraph(sentence_count: 3) }
+      generated_key_points { Faker::Lorem.paragraphs(number: 3).join("\n") }
+      generated_content { "# Test Note\n\n#{Faker::Lorem.paragraph}" }
+      obsidian_file_path { "Captures/test-note-#{SecureRandom.hex(4)}.md" }
       published_at { Time.current }
     end
 
