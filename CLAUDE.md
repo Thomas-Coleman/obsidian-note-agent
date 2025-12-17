@@ -75,6 +75,7 @@ The core functionality follows a multi-stage pipeline orchestrated by `ProcessCa
 - Status enum: `pending`, `processing`, `summarizing`, `enriching`, `formatting`, `published`, `failed`
 - Stores both raw input (`content`, `context`, `content_type`) and generated output (`generated_title`, `generated_summary`, etc.)
 - Supports JSON fields for `tags` and `metadata`
+- **Required fields**: `content` and `content_type` must be provided when creating captures
 
 **Template** - Defines how content is processed and formatted
 - Two template types: `prompt_template` (sent to Claude) and `markdown_template` (final output format)

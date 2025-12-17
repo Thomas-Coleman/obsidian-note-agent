@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_16_005522) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_17_210550) do
   create_table "captures", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "content", size: :medium, null: false
-    t.string "content_type", default: "conversation"
+    t.string "content_type"
     t.string "context"
     t.datetime "created_at", null: false
     t.text "error_message"
@@ -172,7 +172,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_16_005522) do
     t.string "api_token", null: false
     t.datetime "created_at", null: false
     t.string "email", null: false
-    t.string "obsidian_vault_path", default: "/Users/tomcoleman/Documents/Obsidian/Tom's Obsidian Notes"
+    t.string "obsidian_vault_path"
     t.datetime "updated_at", null: false
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
