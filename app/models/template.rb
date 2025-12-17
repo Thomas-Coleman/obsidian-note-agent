@@ -16,18 +16,16 @@ class Template < ApplicationRecord
         4. Suggested tags
 
         Content: {{content}}
-        Context: {{context}}
       PROMPT
       markdown_template: <<~MARKDOWN.strip
         ---
         created: {{created_at}}
-        tags: {{tags}}
+        tags: 
+        {{tags}}
         type: {{content_type}}
         ---
 
         # {{title}}
-
-        {{context_section}}
 
         ## Summary
 
@@ -48,7 +46,7 @@ class Template < ApplicationRecord
         Conversation: {{content}}
       PROMPT
       markdown_template: <<~MARKDOWN.strip
-        # Conversation: {{context}}
+        # Conversation:
 
         {{summary}}
 

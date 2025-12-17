@@ -66,8 +66,7 @@ RSpec.describe 'API V1 Templates', type: :request do
         template: {
           name: 'custom_template',
           prompt_template: 'Analyze: {{content}}',
-          markdown_template: '# {{title}}\n\n{{summary}}',
-          is_default: false
+          markdown_template: '# {{title}}\n\n{{summary}}'
         }
       }
     end
@@ -121,8 +120,7 @@ RSpec.describe 'API V1 Templates', type: :request do
     let(:update_params) do
       {
         template: {
-          name: 'updated',
-          is_default: true
+          name: 'updated'
         }
       }
     end
@@ -136,7 +134,6 @@ RSpec.describe 'API V1 Templates', type: :request do
         expect(response).to have_http_status(:ok)
         template.reload
         expect(template.name).to eq('updated')
-        expect(template.is_default).to eq(true)
       end
 
       it 'does not update other users template' do
