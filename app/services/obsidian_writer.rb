@@ -7,19 +7,19 @@ class ObsidianWriter
   def write(content:, title:, folder: nil)
     # Sanitize filename
     filename = sanitize_filename(title)
-    
+
     # Build full path
     folder_path = folder ? File.join(@vault_path, folder) : @vault_path
     FileUtils.mkdir_p(folder_path)
-    
+
     file_path = File.join(folder_path, "#{filename}.md")
-    
+
     # Handle duplicate filenames
     file_path = ensure_unique_filename(file_path)
-    
+
     # Write the file
     File.write(file_path, content)
-    
+
     # Return relative path from vault root
     file_path.sub(@vault_path + "/", "")
   end

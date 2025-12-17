@@ -46,7 +46,7 @@ RSpec.describe CaptureProcessor do
         expect(result).to include(
           title: 'Test Title',
           summary: 'This is a test summary of the content.',
-          key_points: ['First key point', 'Second key point', 'Third key point'],
+          key_points: [ 'First key point', 'Second key point', 'Third key point' ],
           file_path: 'Captures/test-title.md'
         )
         expect(result[:content]).to be_present
@@ -165,12 +165,12 @@ RSpec.describe CaptureProcessor do
 
       expect(result[:title]).to eq('Test Title')
       expect(result[:summary]).to eq('This is a test summary of the content.')
-      expect(result[:key_points]).to eq(['First key point', 'Second key point', 'Third key point'])
+      expect(result[:key_points]).to eq([ 'First key point', 'Second key point', 'Third key point' ])
       expect(result[:tags]).to include('testing', 'rspec', 'rails')
     end
 
     it 'merges extracted tags with capture tags' do
-      capture.update!(tags: ['original-tag'])
+      capture.update!(tags: [ 'original-tag' ])
       result = processor.send(:parse_ai_response, claude_response)
 
       expect(result[:tags]).to include('testing', 'rspec', 'rails', 'original-tag')
@@ -179,28 +179,28 @@ RSpec.describe CaptureProcessor do
 
   describe '#extract_title' do
     it 'extracts title starting with "Title:"' do
-      lines = ['Title: My Test Title', 'other content']
+      lines = [ 'Title: My Test Title', 'other content' ]
       result = processor.send(:extract_title, lines)
 
       expect(result).to eq('My Test Title')
     end
 
     it 'extracts title starting with "#"' do
-      lines = ['# My Test Title', 'other content']
+      lines = [ '# My Test Title', 'other content' ]
       result = processor.send(:extract_title, lines)
 
       expect(result).to eq('My Test Title')
     end
 
     it 'returns "Untitled Note" when no title found' do
-      lines = ['some content', 'no title here']
+      lines = [ 'some content', 'no title here' ]
       result = processor.send(:extract_title, lines)
 
       expect(result).to eq('Untitled Note')
     end
 
     it 'strips whitespace from title' do
-      lines = ['Title:   Spaced Title   ', 'other content']
+      lines = [ 'Title:   Spaced Title   ', 'other content' ]
       result = processor.send(:extract_title, lines)
 
       expect(result).to eq('Spaced Title')
@@ -235,7 +235,7 @@ RSpec.describe CaptureProcessor do
     end
 
     it 'returns empty string when no summary found' do
-      lines = ['Title: Test', 'No summary here']
+      lines = [ 'Title: Test', 'No summary here' ]
       result = processor.send(:extract_summary, lines)
 
       expect(result).to eq('')
@@ -264,7 +264,7 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_key_points, lines)
 
-      expect(result).to eq(['First point', 'Second point'])
+      expect(result).to eq([ 'First point', 'Second point' ])
     end
 
     it 'extracts bullet points with "*"' do
@@ -275,7 +275,7 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_key_points, lines)
 
-      expect(result).to eq(['First point', 'Second point'])
+      expect(result).to eq([ 'First point', 'Second point' ])
     end
 
     it 'extracts bullet points with "•"' do
@@ -286,11 +286,11 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_key_points, lines)
 
-      expect(result).to eq(['First point', 'Second point'])
+      expect(result).to eq([ 'First point', 'Second point' ])
     end
 
     it 'returns empty array when no key points found' do
-      lines = ['Title: Test', 'No key points']
+      lines = [ 'Title: Test', 'No key points' ]
       result = processor.send(:extract_key_points, lines)
 
       expect(result).to eq([])
@@ -305,32 +305,32 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_key_points, lines)
 
-      expect(result).to eq(['First point'])
+      expect(result).to eq([ 'First point' ])
     end
   end
 
   describe '#extract_tags' do
     it 'extracts backtick-wrapped tags on same line as header' do
-      lines = ['Tags: `#tag1` `#tag2` `#tag3`']
+      lines = [ 'Tags: `#tag1` `#tag2` `#tag3`' ]
       result = processor.send(:extract_tags, lines)
 
       # The actual implementation doesn't remove # from backtick tags on the same line as "Tags:"
       # This matches the actual implementation behavior
-      expect(result).to eq(['#tag1', '#tag2', '#tag3'])
+      expect(result).to eq([ '#tag1', '#tag2', '#tag3' ])
     end
 
     it 'extracts comma-separated tags on same line' do
-      lines = ['Tags: tag1, tag2, tag3']
+      lines = [ 'Tags: tag1, tag2, tag3' ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2', 'tag3'])
+      expect(result).to eq([ 'tag1', 'tag2', 'tag3' ])
     end
 
     it 'extracts space-separated tags on same line' do
-      lines = ['Tags: tag1 tag2 tag3']
+      lines = [ 'Tags: tag1 tag2 tag3' ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2', 'tag3'])
+      expect(result).to eq([ 'tag1', 'tag2', 'tag3' ])
     end
 
     it 'extracts backtick-wrapped tags from next line' do
@@ -340,7 +340,7 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2', 'tag3'])
+      expect(result).to eq([ 'tag1', 'tag2', 'tag3' ])
     end
 
     it 'extracts bullet point tags' do
@@ -352,25 +352,25 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2', 'tag3'])
+      expect(result).to eq([ 'tag1', 'tag2', 'tag3' ])
     end
 
     it 'removes # prefix from tags' do
-      lines = ['Tags: #tag1 #tag2']
+      lines = [ 'Tags: #tag1 #tag2' ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2'])
+      expect(result).to eq([ 'tag1', 'tag2' ])
     end
 
     it 'removes backticks from tags' do
-      lines = ['Tags: `tag1` `tag2`']
+      lines = [ 'Tags: `tag1` `tag2`' ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2'])
+      expect(result).to eq([ 'tag1', 'tag2' ])
     end
 
     it 'returns empty array when no tags found' do
-      lines = ['Title: Test', 'No tags here']
+      lines = [ 'Title: Test', 'No tags here' ]
       result = processor.send(:extract_tags, lines)
 
       expect(result).to eq([])
@@ -383,7 +383,7 @@ RSpec.describe CaptureProcessor do
       ]
       result = processor.send(:extract_tags, lines)
 
-      expect(result).to eq(['tag1', 'tag2'])
+      expect(result).to eq([ 'tag1', 'tag2' ])
     end
   end
 
@@ -393,8 +393,8 @@ RSpec.describe CaptureProcessor do
       {
         title: 'Test Title',
         summary: 'Test summary',
-        key_points: ['Point 1', 'Point 2'],
-        tags: ['tag1', 'tag2']
+        key_points: [ 'Point 1', 'Point 2' ],
+        tags: [ 'tag1', 'tag2' ]
       }
     end
 
@@ -481,7 +481,7 @@ RSpec.describe CaptureProcessor do
 
   describe '#format_key_points' do
     it 'formats points as markdown list' do
-      points = ['First point', 'Second point']
+      points = [ 'First point', 'Second point' ]
       result = processor.send(:format_key_points, points)
 
       expect(result).to eq("- First point\n- Second point")

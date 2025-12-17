@@ -7,10 +7,10 @@ class CaptureProcessor
   def process
     # 1. Get the template
     template = find_template
-    
+
     # 2. Generate content with Claude
     ai_response = generate_with_claude(template)
-    
+
     # 3. Parse the AI response
     parsed_content = parse_ai_response(ai_response)
 
@@ -25,7 +25,7 @@ class CaptureProcessor
 
     # 5. Write to Obsidian vault
     file_path = write_to_obsidian(markdown_content, parsed_content[:title])
-    
+
     {
       title: parsed_content[:title],
       summary: parsed_content[:summary],
@@ -44,7 +44,7 @@ class CaptureProcessor
 
   def generate_with_claude(template)
     prompt = render_prompt(template.prompt_template)
-    
+
     ClaudeService.new.generate(
       prompt: prompt,
       max_tokens: 2000
@@ -63,9 +63,9 @@ class CaptureProcessor
     # Extract structured data from Claude's response
     # For now, we'll use simple parsing
     # Later, we can use structured outputs or JSON mode
-    
+
     lines = response.split("\n")
-    
+
     {
       title: extract_title(lines),
       summary: extract_summary(lines),
@@ -88,7 +88,7 @@ class CaptureProcessor
       break if lines[i].match?(/^(##|Key Points:|Tags:)/)
       summary_lines << lines[i] unless lines[i].strip.empty?
     end
-    
+
     summary_lines.join("\n")
   end
 
@@ -150,7 +150,7 @@ class CaptureProcessor
 
       # Check if line contains backtick-wrapped tags (inline, not bullets)
       # e.g., "`#ActiveJob` `#RubyOnRails` `#JobQueue`"
-      if line.include?('`') && !line.match?(/^[-*•]/)
+      if line.include?("`") && !line.match?(/^[-*•]/)
         tags = line
           .split(/\s+/)
           .map { |tag| tag.gsub(/`/, "").gsub(/^#/, "").strip }
@@ -172,7 +172,7 @@ class CaptureProcessor
       .gsub("{{tags}}", parsed_content[:tags].map { |t| "  - #{t}" }.join("\n"))
       .gsub("{{created_at}}", @capture.created_at.strftime("%Y-%m-%d %H:%M"))
       .gsub("{{content_type}}", @capture.content_type)
-    
+
     # Remove optional sections if empty
     markdown.gsub(/{{context_section}}/, @capture.context ? "## Context\n\n#{@capture.context}" : "")
             .gsub(/{{related_notes_section}}/, "")

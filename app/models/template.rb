@@ -20,7 +20,7 @@ class Template < ApplicationRecord
       markdown_template: <<~MARKDOWN.strip
         ---
         created: {{created_at}}
-        tags: 
+        tags:#{' '}
         {{tags}}
         type: {{content_type}}
         ---

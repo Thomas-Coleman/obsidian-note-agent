@@ -5,13 +5,13 @@ class ProcessCaptureJob < ApplicationJob
 
   def perform(capture_id)
     capture = Capture.find(capture_id)
-    
+
     # Update status to processing
     capture.update!(status: :processing)
-    
+
     # Process the capture
     result = CaptureProcessor.new(capture).process
-    
+
     # Update capture with results
     capture.update!(
       status: :published,

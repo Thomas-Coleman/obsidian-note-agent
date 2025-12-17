@@ -1,7 +1,7 @@
 class ClaudeService
   DEFAULT_SYSTEM_PROMPT = <<~PROMPT.strip
     You are an expert assistant that processes and structures text content for knowledge management.
-    Your task is to analyze the provided content and extract key information in a clear, structured format.  
+    Your task is to analyze the provided content and extract key information in a clear, structured format.#{'  '}
     Your output should be formatted as markdown and include important links (URLs).
 
     Be concise, accurate, and focus on extracting the most valuable information from the content.

@@ -140,7 +140,7 @@ RSpec.describe ClaudeService do
       end
 
       context 'when content has no text field' do
-        let(:claude_response) { { 'content' => [{}] } }
+        let(:claude_response) { { 'content' => [ {} ] } }
 
         it 'returns empty string' do
           result = service.generate(prompt: prompt)

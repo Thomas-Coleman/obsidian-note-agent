@@ -9,7 +9,7 @@ RSpec.describe ProcessCaptureJob, type: :job do
     {
       title: "Test Title",
       summary: "Test summary",
-      key_points: ["Point 1", "Point 2"],
+      key_points: [ "Point 1", "Point 2" ],
       content: "# Test Title\n\nTest content",
       file_path: "Captures/test-title.md"
     }
