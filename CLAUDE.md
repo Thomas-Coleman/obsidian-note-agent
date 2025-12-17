@@ -60,7 +60,7 @@ The core functionality follows a multi-stage pipeline orchestrated by `ProcessCa
 - Template variables: `{{content}}`, `{{context}}`, `{{title}}`, `{{summary}}`, `{{tags}}`, etc.
 
 **ClaudeService** (`app/services/claude_service.rb`)
-- Wrapper around `anthropic-rb` gem
+- Wrapper around `ruby-anthropic` gem
 - Currently uses `claude-sonnet-4-20250514` model
 - Requires `ANTHROPIC_API_KEY` environment variable
 
