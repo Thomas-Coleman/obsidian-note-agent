@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#7c3aed"/>
+
+  <!-- Notepad/document icon -->
+  <rect x="36" y="28" width="56" height="72" rx="4" fill="white"/>
+
+  <!-- Lines representing text -->
+  <line x1="44" y1="44" x2="84" y2="44" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+  <line x1="44" y1="56" x2="84" y2="56" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+  <line x1="44" y1="68" x2="70" y2="68" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Plus sign for "capture" action -->
+  <circle cx="88" cy="88" r="16" fill="#10b981"/>
+  <line x1="88" y1="80" x2="88" y2="96" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="80" y1="88" x2="96" y2="88" stroke="white" stroke-width="4" stroke-linecap="round"/>
+</svg>

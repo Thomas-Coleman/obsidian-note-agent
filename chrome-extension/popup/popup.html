@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Note Agent Capture</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Capture Panel (default view) -->
+  <div id="capturePanel" class="panel active">
+    <div class="header">
+      <h1>Capture to Obsidian</h1>
+      <button id="settingsBtn" class="icon-btn" title="Settings">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M17.43 10.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C12.46 2.18 12.25 2 12 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="statusMessage" class="status-message hidden"></div>
+
+    <div id="loadingState" class="loading-state">
+      <div class="spinner"></div>
+      <p>Extracting content...</p>
+    </div>
+
+    <div id="captureForm" class="capture-form hidden">
+      <div class="form-group">
+        <label for="contentType">Content Type</label>
+        <select id="contentType" class="form-control">
+          <option value="article">Article</option>
+          <option value="conversation">Conversation</option>
+          <option value="note">Note</option>
+          <option value="reference">Reference</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="context">Context (optional)</label>
+        <textarea id="context" class="form-control" rows="3" placeholder="Add any additional context..."></textarea>
+        <small class="form-help">Source URL is automatically included</small>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags (comma-separated)</label>
+        <input type="text" id="tags" class="form-control" placeholder="tag1, tag2, tag3">
+        <small class="form-help">Will be merged with AI-suggested tags</small>
+      </div>
+
+      <div class="form-group">
+        <label for="obsidianFolder">Obsidian Folder</label>
+        <input type="text" id="obsidianFolder" class="form-control" value="Captures">
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="skipProcessing">
+          <span>Save as-is (skip AI processing)</span>
+        </label>
+        <small class="form-help">When checked, saves raw content without Claude summary</small>
+      </div>
+
+      <div class="metadata-preview">
+        <button type="button" id="metadataToggle" class="metadata-toggle">
+          Show Metadata & Preview
+          <span class="arrow">▼</span>
+        </button>
+        <div id="metadataContent" class="metadata-content hidden">
+          <div class="metadata-item">
+            <strong>URL:</strong> <span id="metadataUrl"></span>
+          </div>
+          <div class="metadata-item">
+            <strong>Domain:</strong> <span id="metadataDomain"></span>
+          </div>
+          <div class="metadata-item">
+            <strong>Title:</strong> <span id="metadataTitle"></span>
+          </div>
+          <div class="metadata-item">
+            <strong>Extraction Method:</strong> <span id="metadataMethod"></span>
+          </div>
+          <div class="metadata-item">
+            <strong>Word Count:</strong> <span id="metadataWordCount"></span>
+          </div>
+          <div id="contentPreview" class="content-preview"></div>
+        </div>
+      </div>
+
+      <button id="captureBtn" class="btn btn-primary">
+        Save to Obsidian
+      </button>
+    </div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div id="settingsPanel" class="panel">
+    <div class="header">
+      <button id="backBtn" class="icon-btn" title="Back">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M15 10l-8-8v6H2v4h5v6z"/>
+        </svg>
+      </button>
+      <h1>Settings</h1>
+    </div>
+
+    <div class="settings-form">
+      <div class="form-group">
+        <label for="apiEndpoint">API Endpoint</label>
+        <input type="text" id="apiEndpoint" class="form-control" placeholder="http://localhost/api/v1">
+        <small class="form-help">Your Rails API endpoint (default: http://localhost/api/v1)</small>
+      </div>
+
+      <div class="form-group">
+        <label for="apiToken">API Token</label>
+        <input type="password" id="apiToken" class="form-control" placeholder="Your API token">
+        <small class="form-help">Get this from your user account in the Rails app</small>
+      </div>
+
+      <button id="saveSettingsBtn" class="btn btn-primary">
+        Save Settings
+      </button>
+
+      <div id="settingsStatus" class="status-message hidden"></div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -2,6 +2,11 @@
 
 This guide walks you through setting up and running the Obsidian Note Agent in production mode on your local MacBook using Docker Compose.
 
+**Monorepo Structure:** This project uses a monorepo organization:
+- `note-agent-app/` - Rails API application
+- `chrome-extension/` - Chrome extension for web capture (in development)
+- Root directory - Docker orchestration and management scripts
+
 ## Quick Start
 
 **Already have Docker installed?** Here's the fastest path to running:
@@ -634,7 +639,7 @@ Your database data is preserved.
 
 ### Customizing MySQL Configuration
 
-Create `config/mysql/production.cnf`:
+Create `note-agent-app/config/mysql/production.cnf`:
 
 ```ini
 [mysqld]
@@ -645,7 +650,7 @@ innodb_buffer_pool_size = 1G
 Uncomment in `docker-compose.yml`:
 ```yaml
 volumes:
-  - ./config/mysql/production.cnf:/etc/mysql/conf.d/custom.cnf
+  - ./note-agent-app/config/mysql/production.cnf:/etc/mysql/conf.d/custom.cnf
 ```
 
 ### Running Multiple Environments

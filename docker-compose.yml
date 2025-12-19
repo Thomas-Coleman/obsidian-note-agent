@@ -40,7 +40,7 @@ services:
   # This builds and runs your Rails app in production mode
   app:
     build:
-      context: .
+      context: ./note-agent-app
       dockerfile: Dockerfile
     container_name: obsidian_note_agent_app
     restart: unless-stopped

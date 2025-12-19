@@ -66,7 +66,9 @@ module Api
           :context,
           :obsidian_folder,
           :template_id,
-          tags: []
+          :skip_processing,
+          tags: [],
+          metadata: {}
         )
       end
 

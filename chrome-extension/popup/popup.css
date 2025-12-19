@@ -1,0 +1,343 @@
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  width: 400px;
+  min-height: 400px;
+  background: #f5f5f5;
+}
+
+/* Panel system */
+.panel {
+  display: none;
+  padding: 16px;
+  background: #fff;
+  min-height: 400px;
+}
+
+.panel.active {
+  display: block;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Status messages */
+.status-message {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-message.hidden {
+  display: none;
+}
+
+.status-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.status-message.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/* Loading state */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 16px;
+}
+
+.loading-state.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #7c3aed;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form styles */
+.capture-form,
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.capture-form.hidden {
+  display: none;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-control {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-help {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Checkbox */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #7c3aed;
+}
+
+.checkbox-label span {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #7c3aed;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #6d28d9;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Metadata preview */
+.metadata-preview {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.metadata-toggle {
+  width: 100%;
+  padding: 12px;
+  background: #f9f9f9;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  transition: background-color 0.2s;
+}
+
+.metadata-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+.metadata-toggle .arrow {
+  transition: transform 0.2s;
+}
+
+.metadata-toggle.expanded .arrow {
+  transform: rotate(-180deg);
+}
+
+.metadata-content {
+  padding: 12px;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.metadata-content.hidden {
+  display: none;
+}
+
+.metadata-item {
+  padding: 6px 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.metadata-item strong {
+  color: #666;
+  display: inline-block;
+  min-width: 120px;
+}
+
+.metadata-item span {
+  color: #333;
+  word-break: break-word;
+}
+
+.content-preview {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #555;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.content-preview:empty {
+  display: none;
+}
+
+/* Scrollbar styles */
+.content-preview::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-preview::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.content-preview::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.content-preview::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Settings panel specific styles */
+.settings-form {
+  max-width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-height: 500px) {
+  body {
+    min-height: 300px;
+  }
+
+  .panel {
+    min-height: 300px;
+  }
+}
