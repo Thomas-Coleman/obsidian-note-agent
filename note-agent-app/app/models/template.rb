@@ -35,6 +35,8 @@ class Template < ApplicationRecord
 
         {{key_points}}
 
+        {{context_section}}
+
         {{related_notes_section}}
       MARKDOWN
     },

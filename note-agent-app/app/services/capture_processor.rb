@@ -5,6 +5,11 @@ class CaptureProcessor
   end
 
   def process
+    # Check if we should skip AI processing
+    if @capture.skip_processing
+      return process_without_ai
+    end
+
     # 1. Get the template
     template = find_template
 
@@ -36,6 +41,72 @@ class CaptureProcessor
   end
 
   private
+
+  def process_without_ai
+    # Generate title from metadata or use a default
+    title = @capture.metadata&.dig("title") ||
+            "Capture #{@capture.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+    # Build simple markdown without AI processing
+    markdown_content = build_raw_markdown(title)
+
+    # Write to Obsidian vault
+    file_path = write_to_obsidian(markdown_content, title)
+
+    {
+      title: title,
+      summary: nil,
+      key_points: [],
+      content: markdown_content,
+      file_path: file_path
+    }
+  end
+
+  def build_raw_markdown(title)
+    # Build frontmatter with metadata
+    frontmatter = [
+      "---",
+      "created: #{@capture.created_at.strftime('%Y-%m-%d %H:%M')}",
+      "type: #{@capture.content_type}",
+      "date created: #{@capture.created_at.strftime('%A, %B %eth %Y, %l:%M:%S %P')}",
+      "date modified: #{@capture.updated_at.strftime('%A, %B %eth %Y, %l:%M:%S %P')}"
+    ]
+
+    # Add tags if present
+    if @capture.tags.present?
+      frontmatter << "tags:"
+      @capture.tags.each { |tag| frontmatter << "  - #{tag}" }
+    end
+
+    # Add metadata if present
+    if @capture.metadata.present?
+      frontmatter << "url: #{@capture.metadata['url']}" if @capture.metadata['url']
+      frontmatter << "domain: #{@capture.metadata['domain']}" if @capture.metadata['domain']
+      frontmatter << "author: #{@capture.metadata['author']}" if @capture.metadata['author']
+      frontmatter << "publish_date: #{@capture.metadata['publishDate']}" if @capture.metadata['publishDate']
+    end
+
+    frontmatter << "---"
+    frontmatter << ""
+
+    # Add title
+    content_parts = [frontmatter.join("\n"), "# #{title}", ""]
+
+    # Add context if present
+    if @capture.context.present?
+      content_parts << "## Context"
+      content_parts << ""
+      content_parts << @capture.context
+      content_parts << ""
+    end
+
+    # Add the raw content
+    content_parts << "## Content"
+    content_parts << ""
+    content_parts << @capture.content
+
+    content_parts.join("\n")
+  end
 
   def find_template
     # Use capture's assigned template or fall back to system default
@@ -70,7 +141,7 @@ class CaptureProcessor
       title: extract_title(lines),
       summary: extract_summary(lines),
       key_points: extract_key_points(lines),
-      tags: extract_tags(lines) + @capture.tags
+      tags: extract_tags(lines) + (@capture.tags || [])
     }
   end
 
